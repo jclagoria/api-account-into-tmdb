@@ -1,0 +1,14 @@
+{
+  "MODE_ENV": "development",
+  "PORT": 6000,
+  "CACHE_TIME_OUT": 10000,
+  "TMDB": {
+    "BASE_URL": "http://api.themoviedb.org/3",
+    "ACCESS_TOKEN": "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1ODdiNDNmYzJlY2UwYjEzYWYwODAzYjJjNDA3MzYzNyIsInN1YiI6IjYwNmQxZGFlMGQyZjUzMDA0MGE1OWI3NiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.tMFZsz1GZM1ZX-WOp737Hv7ViYg4mV_ujBdT1WN4gmo"
+  },
+  "CIRCUIT": {
+    "TIMEOUT": 7000,
+    "ERROR_PERCENTAGE": 50,
+    "REQUEST_TIMEOUT": 30000
+  }
+}
