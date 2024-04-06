@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "nodemon ./src/index.ts",
     "start": "tsc && node ./dist/index.js",
-    "test": "NODE_ENV=test PORT=1234 jest --verbose tests/user.test.js",
+    "test": "NODE_ENV=test PORT=1234 jest --verbose --testMatch='**/?(*.)+(spec|test).[tj]s?(x)'",
     "test:watch": "npm run test -- --watch"
   },
   "keywords": [],
