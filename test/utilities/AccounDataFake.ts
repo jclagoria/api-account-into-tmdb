@@ -1,5 +1,5 @@
 import {DetailsAccount} from "../../src/domain/models/detailsAccount";
-import {AccountFavoriteMovie} from "../../src/domain/models/AccountFavoriteMovie";
+import {AccountSuccess} from "../../src/domain/models/AccountSuccess";
 import {ApiError} from "../../src/domain/models/ApiError";
 
 export function generateFakeDetailsAccount(): DetailsAccount {
@@ -21,7 +21,7 @@ export function generateFakeDetailsAccount(): DetailsAccount {
     }
 }
 
-export function generateMovieInfoToAdd(): AccountFavoriteMovie {
+export function generateMovieInfoToAdd(): AccountSuccess {
     return {
         success: true,
         status_code: 1,
@@ -29,7 +29,7 @@ export function generateMovieInfoToAdd(): AccountFavoriteMovie {
     }
 }
 
-export function generateMovieInfoToAddUpdate(): AccountFavoriteMovie {
+export function generateMovieInfoToAddUpdate(): AccountSuccess {
     return {
         success: true,
         status_code: 12,
@@ -47,10 +47,36 @@ export function generateExceptionWhenAddFavoriteMovie(): ApiError {
     }
 }
 
-export function generateResponseRemoveFromFavorites(): AccountFavoriteMovie {
+export function generateResponseRemoveFromFavorites(): AccountSuccess {
     return {
         "success": true,
         "status_code": 13,
         "status_message": "The item/record was deleted successfully."
+    }
+}
+
+export function generatedResponseAddMovieToWatchList(): AccountSuccess {
+    return {
+        "success": true,
+        "status_code": 1,
+        "status_message": "Success."
+    }
+}
+
+export function generateResponseRemoveFromWatchlist(): AccountSuccess {
+    return {
+        success: true,
+        status_code: 13,
+        status_message: "The item/record was deleted successfully."
+    }
+}
+
+export function generateExceptionWhenAddWatchList(): ApiError {
+    return {
+        api_status_code: 404,
+        api_status_text: "Not Found",
+        success: false,
+        status_code: 34,
+        status_message: "The resource you requested could not be found."
     }
 }

@@ -1,4 +1,4 @@
 dist/
-nodemon.json/
+node_modules/
 
 .idea/
