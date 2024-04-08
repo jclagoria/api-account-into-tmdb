@@ -1,52 +1,18 @@
 import {server} from '../src'
-// @ts-ignore
-import {
-    generatedResponseAddMovieToWatchList,
-    generateExceptionWhenAddFavoriteMovie, generateExceptionWhenAddWatchList,
-    generateFakeDetailsAccount,
-    generateMovieInfoToAdd,
-    generateMovieInfoToAddUpdate, generateResponseRemoveFromFavorites, generateResponseRemoveFromWatchlist
-} from "./utilities/AccounDataFake";
-// @ts-ignore
 import {
     addAMovieToWatchList,
     deleteMovieFromFavoritesMovies,
     errorInServiceAddFavoriteMovie, errorInServiceAddWatchlist,
     generateAddFavoriteMovie, removeMovieFromWatchlist
 } from "./utilities/RequestData";
-import exp = require("constants");
-
-const {api} = require('./helpers')
-
-describe('TMDB API get Account Description test', () => {
-    it('fetches account details successfully', async () => {
-        const expectedData = generateFakeDetailsAccount()
-
-        const response = await api
-            .get('/api/account/details/10332765')
-            .expect(200)
-
-        expect(response.status).toBe(200)
-        expect(response.body).toEqual(expectedData)
-    })
-
-    it('is not possible the accountId because url is note correct', async () => {
-        const response = await api.get('/api/account/details/').expect(404)
-
-        expect(response.status).toBe(404)
-    })
-
-    it('Is not possible the accountId is not valid', async () => {
-        const requestError = {
-            codeMessage: 'TMDB0001',
-            message: 'AccountId is required and must be an integer.'
-        }
-        const response = await api.get('/api/account/details/fr2233o').expect(400)
-
-        expect(response.status).toBe(400)
-        expect(response.body).toEqual(requestError)
-    })
-})
+import {
+    generatedResponseAddMovieToWatchList,
+    generateExceptionWhenAddFavoriteMovie, generateExceptionWhenAddWatchList,
+    generateMovieInfoToAdd,
+    generateMovieInfoToAddUpdate, generateResponseRemoveFromFavorites, generateResponseRemoveFromWatchlist
+} from "./utilities/AccounDataFake";
+import {api} from "./helpers";
+import {responseErrorAccountId} from "./utilities/ErrorTypes";
 
 describe('TMDB add Movie to favorite list', () => {
     it('Add new Movie to the list', async () => {
@@ -88,10 +54,7 @@ describe('TMDB add Movie to favorite list', () => {
     })
 
     it('Is not possible to add because accountId is incorrect', async () => {
-        const responseError = {
-            codeMessage: 'TMDB0001',
-            message: 'AccountId is required and must be an integer.'
-        }
+        const responseError = responseErrorAccountId
 
         const response = await api.post('/api/account/344sde222/favorite')
             .expect(400)
@@ -129,10 +92,7 @@ describe('Add a movie to the list of Watchlist ', () => {
     })
 
     it('Try to add a movie to watchlist but send incorrect accountId', async () => {
-        const responseError = {
-            codeMessage: 'TMDB0001',
-            message: 'AccountId is required and must be an integer.'
-        }
+        const responseError = responseErrorAccountId
 
         const response = await api.post('/api/account/103X27C5/watchlist')
             .expect(400)
@@ -141,7 +101,7 @@ describe('Add a movie to the list of Watchlist ', () => {
         expect(response.body).toEqual(responseError)
     })
 
-    it('Is not possible ', async () => {
+    it('Is not possible to add, send incorrect type of media type', async () => {
         const requestObject = errorInServiceAddWatchlist()
         const responseObject = generateExceptionWhenAddWatchList()
 
@@ -169,5 +129,4 @@ describe('Add a movie to the list of Watchlist ', () => {
 
 afterAll(() => {
     server.close()
-    api.release
 })

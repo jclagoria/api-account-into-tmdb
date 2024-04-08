@@ -3,6 +3,7 @@ import {fetchData} from '../../../application/services/TmdbService'
 import {DetailsAccount} from '../../../domain/models/detailsAccount'
 import {addMediaIdTOWatchlist, markMovieAsFavorite} from '../../../application/commands/markFavoriteCommandHandler'
 import {generateKey} from '../../../infrastructure/utils/cacheUtilities'
+import {FavoriteMovie} from "../../../domain/models/FavoriteMovie";
 
 export const routerTMDB = Router()
 
@@ -83,4 +84,47 @@ routerTMDB.post('/:accountId/watchlist', async (req: Request, res: Response, nex
     } catch (error) {
         next(error)
     }
+})
+
+routerTMDB.get('/:accountId/favorites/movies', async (req: Request, res: Response, next: NextFunction)=> {
+   try {
+       const accountId = req.params.accountId
+       const languageValue = req.query.language
+       const numberPage = req.query.page
+       const sortByValue = req.query.sort_by
+
+       if(!accountId || isNaN(Number(accountId)) || !Number.isInteger(Number(accountId))) {
+           const error = {
+               codeMessage: 'TMDB0001',
+               message: 'AccountId is required and must be an integer.'
+           }
+           res.status(400).json(error)
+           return
+       }
+
+       if(numberPage && isNaN(Number(numberPage)) && !Number.isInteger(Number(numberPage))){
+           const error = {
+               codeMessage: 'TMDB0002',
+               message: '"Invalid page: Pages start at 1 and max at 500. They are expected to be an integer.'
+           }
+           res.status(400).json(error)
+           return
+       }
+
+       const paramKey = {
+           action: 'favorite-movies',
+           language: languageValue,
+           pageNumber: numberPage,
+           sort: sortByValue
+       }
+
+       const keyCache = generateKey({url:`/${accountId}/favorites/movies`, params:  paramKey})
+       const urlParam = `/account/${accountId}/favorite/movies?language=${languageValue}&page=${numberPage}&sort_by=${sortByValue}`
+       const favoritesMovies = await fetchData<FavoriteMovie>(keyCache, urlParam)
+
+       res.status(200).json(favoritesMovies)
+   } catch (error) {
+       next(error)
+   }
+
 })
