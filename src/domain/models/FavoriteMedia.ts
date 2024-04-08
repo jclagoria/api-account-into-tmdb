@@ -1,6 +1,6 @@
 import {InfoMediaType} from "./InfoMediaType";
 
-export interface FavoriteMovie {
+export interface FavoriteMedia {
     page: number;
     results: Array<InfoMediaType>;
     total_pages: number;

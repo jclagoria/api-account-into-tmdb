@@ -1,6 +1,8 @@
-import {FavoriteMovie} from "../../src/domain/models/FavoriteMovie";
+import {FavoriteMedia} from "../../src/domain/models/FavoriteMedia";
+import {TvMediaType} from "../../src/domain/models/TvMediaType";
+import {FavoriteTv} from "../../src/domain/models/FavoriteTv";
 
-export function responseOfListOfMedias():FavoriteMovie {
+export function responseOfListOfMedias():FavoriteMedia {
     return {
         page: 1,
         results: [
@@ -105,11 +107,113 @@ export function responseOfListOfMedias():FavoriteMovie {
     }
 }
 
-export function responseOfEmptyListOfMedias(): FavoriteMovie {
+export function responseOfEmptyListOfMovies(): FavoriteTv {
     return {
-        "page": 17,
-        "results": [],
-        "total_pages": 1,
-        "total_results": 5
+        page: 17,
+        results: [],
+        total_pages: 1,
+        total_results: 5
+    }
+}
+
+export function responseOfListOfTv(): FavoriteTv {
+    return {
+        page: 1,
+        results: [
+            {
+                adult: false,
+                backdrop_path: "/9faGSFi5jam6pDWGNd0p8JcJgXQ.jpg",
+                genre_ids: [
+                    18,
+                    80
+                ],
+                id: 1396,
+                origin_country: [
+                    "US"
+                ],
+                original_language: "en",
+                original_name: "Breaking Bad",
+                overview: "Walter White, a New Mexico chemistry teacher, is diagnosed with Stage III cancer and given a prognosis of only two years left to live. He becomes filled with a sense of fearlessness and an unrelenting desire to secure his family's financial future at any cost as he enters the dangerous world of drugs and crime.",
+                popularity: 535.176,
+                poster_path: "/ztkUQFLlC19CCMYHW9o1zWhJRNq.jpg",
+                first_air_date: "2008-01-20",
+                name: "Breaking Bad",
+                vote_average: 8.908,
+                vote_count: 13365
+            },
+            {
+                adult: false,
+                backdrop_path: "/nVRyd8hlg0ZLxBn9RaI7mUMQLnz.jpg",
+                genre_ids: [
+                    18,
+                    9648,
+                    10765
+                ],
+                id: 1622,
+                origin_country: [
+                    "US"
+                ],
+                original_language: "en",
+                original_name: "Supernatural",
+                overview: "When they were boys, Sam and Dean Winchester lost their mother to a mysterious and demonic supernatural force. Subsequently, their father raised them to be soldiers. He taught them about the paranormal evil that lives in the dark corners and on the back roads of America ... and he taught them how to kill it. Now, the Winchester brothers crisscross the country in their '67 Chevy Impala, battling every kind of supernatural threat they encounter along the way. ",
+                popularity: 2911.736,
+                poster_path: "/KoYWXbnYuS3b0GyQPkbuexlVK9.jpg",
+                first_air_date: "2005-09-13",
+                name: "Supernatural",
+                vote_average: 8.3,
+                vote_count: 7200
+            },
+            {
+                adult: false,
+                backdrop_path: "/se2jymoLDghIrLewQismwfmWG.jpg",
+                genre_ids: [],
+                id: 11,
+                origin_country: [
+                    "US"
+                ],
+                original_language: "en",
+                original_name: "Strictly Sex with Dr. Drew",
+                overview: "Strictly Sex with Dr. Drew is a television show hosted by Loveline host Dr. Drew Pinsky. It ran for 10 episodes in all, and is still featured on the Discovery Health channel.",
+                popularity: 4.059,
+                poster_path: "/3hFpUg6Ty25Vs5XgbnNz1Xcirb5.jpg",
+                first_air_date: "2005-06-08",
+                name: "Strictly Sex with Dr. Drew",
+                vote_average: 0.0,
+                vote_count: 0
+            },
+            {
+                adult: false,
+                backdrop_path: "/hib8MpBPU7GdluS38htXCF4uw0c.jpg",
+                genre_ids: [
+                    80,
+                    18,
+                    9648
+                ],
+                id: 2734,
+                origin_country: [
+                    "US"
+                ],
+                original_language: "en",
+                original_name: "Law & Order: Special Victims Unit",
+                overview: "In the criminal justice system, sexually-based offenses are considered especially heinous. In New York City, the dedicated detectives who investigate these vicious felonies are members of an elite squad known as the Special Victims Unit. These are their stories.",
+                popularity: 4694.069,
+                poster_path: "/onmSVwYsPMYtO8OjLdjS8FfRNKb.jpg",
+                first_air_date: "1999-09-20",
+                name: "Law & Order: Special Victims Unit",
+                vote_average: 7.963,
+                vote_count: 3593
+            }
+        ],
+        total_pages: 1,
+        total_results: 4
+    }
+}
+
+export function responseOfEmptyListOfTvs() : FavoriteTv {
+    return {
+        page: 10,
+        results: [],
+        total_pages: 1,
+        total_results: 4
     }
 }
