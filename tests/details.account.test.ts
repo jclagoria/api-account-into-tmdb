@@ -1,11 +1,11 @@
 import {server} from '../src'
 // @ts-ignore
+import {api} from './helpers';
+// @ts-ignore
 import {
     generateFakeDetailsAccount,
 } from "./utilities/AccounDataFake";
-
-
-const {api} = require('./helpers')
+import {responseErrorAccountId} from "./utilities/ErrorTypes";
 
 describe('TMDB API get Account Description tests', () => {
     it('fetches account details successfully', async () => {
@@ -26,10 +26,7 @@ describe('TMDB API get Account Description tests', () => {
     })
 
     it('Is not possible the accountId is not valid', async () => {
-        const requestError = {
-            codeMessage: 'TMDB0001',
-            message: 'AccountId is required and must be an integer.'
-        }
+        const requestError = responseErrorAccountId
         const response = await api.get('/api/account/details/fr2233o').expect(400)
 
         expect(response.status).toBe(400)
@@ -39,5 +36,4 @@ describe('TMDB API get Account Description tests', () => {
 
 afterAll(() => {
     server.close()
-    api.release
 })

@@ -12,6 +12,7 @@ import {
     generateMovieInfoToAddUpdate, generateResponseRemoveFromFavorites, generateResponseRemoveFromWatchlist
 } from "./utilities/AccounDataFake";
 import {api} from "./helpers";
+import {responseErrorAccountId} from "./utilities/ErrorTypes";
 
 describe('TMDB add Movie to favorite list', () => {
     it('Add new Movie to the list', async () => {
@@ -53,10 +54,7 @@ describe('TMDB add Movie to favorite list', () => {
     })
 
     it('Is not possible to add because accountId is incorrect', async () => {
-        const responseError = {
-            codeMessage: 'TMDB0001',
-            message: 'AccountId is required and must be an integer.'
-        }
+        const responseError = responseErrorAccountId
 
         const response = await api.post('/api/account/344sde222/favorite')
             .expect(400)
@@ -94,10 +92,7 @@ describe('Add a movie to the list of Watchlist ', () => {
     })
 
     it('Try to add a movie to watchlist but send incorrect accountId', async () => {
-        const responseError = {
-            codeMessage: 'TMDB0001',
-            message: 'AccountId is required and must be an integer.'
-        }
+        const responseError = responseErrorAccountId
 
         const response = await api.post('/api/account/103X27C5/watchlist')
             .expect(400)
