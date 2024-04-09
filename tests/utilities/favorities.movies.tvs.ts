@@ -1,6 +1,6 @@
 import {FavoriteMedia} from "../../src/domain/models/FavoriteMedia";
-import {TvMediaType} from "../../src/domain/models/TvMediaType";
 import {FavoriteTv} from "../../src/domain/models/FavoriteTv";
+import {ListTMDB} from "../../src/domain/models/ListTMDB";
 
 export function responseOfListOfMedias():FavoriteMedia {
     return {
@@ -213,6 +213,56 @@ export function responseOfEmptyListOfTvs() : FavoriteTv {
     return {
         page: 10,
         results: [],
+        total_pages: 1,
+        total_results: 4
+    }
+}
+
+export function responseOfListsTMBD(): ListTMDB {
+    return {
+        page: 1,
+        results: [
+            {
+                description: "Movies with sharcks and derivates",
+                favorite_count: 0,
+                id: 8271148,
+                item_count: 3,
+                iso_639_1: "en",
+                list_type: "movie",
+                name: "SharkList",
+                poster_path: null
+            },
+            {
+                description: "List of the best of the series",
+                favorite_count: 0,
+                id: 8271151,
+                item_count: 4,
+                iso_639_1: "en",
+                list_type: "movie",
+                name: "BestSeriesOldTime",
+                poster_path: null
+            },
+            {
+                description: "KList of series or movies",
+                favorite_count: 0,
+                id: 8271150,
+                item_count: 2,
+                iso_639_1: "en",
+                list_type: "movie",
+                name: "Anime",
+                poster_path: null
+            },
+            {
+                description: "The best horror muvies from Asia.",
+                favorite_count: 0,
+                id: 8271149,
+                item_count: 1,
+                iso_639_1: "en",
+                list_type: "movie",
+                name: "HorrorMoviesFromAsia",
+                poster_path: null
+            }
+        ],
         total_pages: 1,
         total_results: 4
     }
