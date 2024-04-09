@@ -5,7 +5,7 @@ import {api} from './helpers';
 import {
     responseOfEmptyListOfMovies,
     responseOfEmptyListOfTvs,
-    responseOfListOfMedias, responseOfListOfTv
+    responseOfListOfMedias, responseOfListOfTv, responseOfListsTMBD
 } from "./utilities/favorities.movies.tvs";
 import {responseErrorAccountId, responseErrorInvalidPage} from "./utilities/ErrorTypes";
 
@@ -112,6 +112,41 @@ describe('TMDB retrieve the list of favorite tv list',  () => {
         expect(response.body.results.length).toEqual(responseExpected.results.length)
         expect(response.body.total_pages).toEqual(responseExpected.total_pages)
         expect(response.body.total_results).toEqual(responseExpected.total_results)
+    })
+})
+
+describe('Return the list of list of categories from TMDB API', ()=> {
+    it('Fetch the lit of related to the accountID', async () => {
+        const expectedList = responseOfListsTMBD()
+
+        const response = await api.get('/api/account/10332765/lists?page=1').expect(200)
+
+        expect(response.status).toBe(200)
+        expect(response.body.page).toEqual(expectedList.page)
+        expect(response.body.results.length).toEqual(expectedList.results.length)
+        expect(response.body.results).toEqual(expect.arrayContaining(expectedList.results))
+        expect(response.body.total_pages).toEqual(expectedList.total_pages)
+        expect(response.body.total_results).toEqual(expectedList.total_results)
+    })
+
+    it('Send an incorrect accountId', async () => {
+        const expectedObject = responseErrorAccountId
+
+        const response = await api.get('/api/account/776jwew77/lists?page=1').expect(400)
+
+        expect(response.status).toBe(400)
+        expect(response.body.codeMessage).toEqual(expectedObject.codeMessage)
+        expect(response.body.message).toEqual(expectedObject.message)
+    })
+
+    it('Send an incorrect number page', async () => {
+        const expectedObject = responseErrorInvalidPage
+
+        const response = await api.get('/api/account/10332765/lists?page=X').expect(400)
+
+        expect(response.status).toBe(400)
+        expect(response.body.codeMessage).toEqual(expectedObject.codeMessage)
+        expect(response.body.message).toEqual(expectedObject.message)
     })
 })
 
