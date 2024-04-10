@@ -5,6 +5,7 @@ import {addMediaIdTOWatchlist, markMovieAsFavorite} from '../../../application/c
 import {generateKey} from '../../../infrastructure/utils/cacheUtilities'
 import {FavoriteMedia} from "../../../domain/models/FavoriteMedia";
 import {ListTMDB} from "../../../domain/models/ListTMDB";
+import {RatedMovie} from "../../../domain/models/RatedMovie";
 
 export const routerTMDB = Router()
 
@@ -205,6 +206,46 @@ routerTMDB.get('/:accountId/lists', async (req: Request, res: Response, next: Ne
         const responseLists: ListTMDB = await fetchData(keyCache, urlParam)
 
         res.status(200).json(responseLists)
+    } catch (error) {
+        next(error)
+    }
+})
+
+routerTMDB.get('/:accountId/rated/movies', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const accountId = req.params.accountId
+        const numberPage = req.query.page
+        const language = req.query.language
+        const sortBy = req.query.sort_by
+
+        if(!accountId || isNaN(Number(accountId)) || !Number.isInteger(Number(accountId))) {
+            const error = {
+                codeMessage: 'TMDB0001',
+                message: 'AccountId is required and must be an integer.'
+            }
+            res.status(400).json(error)
+            return
+        }
+
+        if(numberPage && isNaN(Number(numberPage)) && !Number.isInteger(Number(numberPage))){
+            const error = {
+                codeMessage: 'TMDB0002',
+                message: '"Invalid page: Pages start at 1 and max at 500. They are expected to be an integer.'
+            }
+            res.status(400).json(error)
+            return
+        }
+
+        const urlParam = `/account/${accountId}/rated/movies?language=${language}&page=${numberPage}&sort_by=${sortBy}`
+        const paramKey = {
+            action: 'rated-movies',
+            numberPage: numberPage
+        }
+
+        const keyCache = generateKey({url: `/account/${accountId}/rated/movies`, params: paramKey})
+        const responseList: RatedMovie = await fetchData<RatedMovie>(keyCache, urlParam)
+
+        res.status(200).json(responseList)
     } catch (error) {
         next(error)
     }
