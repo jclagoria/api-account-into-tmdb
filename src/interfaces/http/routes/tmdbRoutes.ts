@@ -250,3 +250,43 @@ routerTMDB.get('/:accountId/rated/movies', async (req: Request, res: Response, n
         next(error)
     }
 })
+
+routerTMDB.get('/:accountId/rated/tv', async (req: Request, res: Response, next: NextFunction)=> {
+    try {
+        const accountId = req.params.accountId
+        const numberPage = req.query.page
+        const language = req.query.language
+        const sortBy = req.query.sort_by
+
+        if(!accountId || isNaN(Number(accountId)) || !Number.isInteger(Number(accountId))) {
+            const error = {
+                codeMessage: 'TMDB0001',
+                message: 'AccountId is required and must be an integer.'
+            }
+            res.status(400).json(error)
+            return
+        }
+
+        if(numberPage && isNaN(Number(numberPage)) && !Number.isInteger(Number(numberPage))){
+            const error = {
+                codeMessage: 'TMDB0002',
+                message: '"Invalid page: Pages start at 1 and max at 500. They are expected to be an integer.'
+            }
+            res.status(400).json(error)
+            return
+        }
+
+        const urlParam = `/account/${accountId}/rated/tv?language=${language}&page=${numberPage}&sort_by=${sortBy}`
+        const paramKey = {
+            action: 'rated_tv',
+            numberPage: numberPage
+        }
+
+        const keyCache = generateKey({url: `/account/${accountId}/rated/tv`, params: paramKey})
+        const responseRatedTv = await fetchData(keyCache, urlParam)
+
+        res.status(200).json(responseRatedTv)
+    } catch (error) {
+        next(error)
+    }
+})
