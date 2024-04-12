@@ -8,6 +8,11 @@ import {APICache} from './infrastructure/cache/APICache'
 import {securityMiddleware} from './interfaces/http/middleware/security'
 import configTmdb from './infrastructure/config'
 import {setupSwagger} from './docs/swaggerDefinition'
+import {healthApiRouter} from './interfaces/http/routes/healthApiRouter'
+import {addMediaTypeMDB} from './interfaces/http/routes/addMediaType'
+import {favoritesTMDB} from './interfaces/http/routes/favoritesTMDB'
+import {ratedMediaTypeTMDB} from "./interfaces/http/routes/ratedMediaTypeTMDB";
+import {watchlistMediaTmdb} from "./interfaces/http/routes/watchlistMediaTmdb";
 
 const app = express()
 const PORT = configTmdb.get('PORT')
@@ -19,11 +24,12 @@ app.use(errorHandler())
 
 APICache.initialize(configTmdb.get('CACHE_TIME_OUT'));
 
+app.use('/api', healthApiRouter)
 app.use('/api/account', routerTMDB)
-
-app.get('/health', (req, res) =>
-    res.status(200).send('API is UP')
-)
+app.use('/api/account', addMediaTypeMDB)
+app.use('/api/account', favoritesTMDB)
+app.use('/api/account', ratedMediaTypeTMDB)
+app.use('/api/account', watchlistMediaTmdb)
 
 app.use(errorHandlerApi)
 setupSwagger(app)

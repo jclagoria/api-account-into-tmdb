@@ -4,7 +4,6 @@ import {api} from './helpers';
 import {responseErrorAccountId, responseErrorInvalidPage} from "./utilities/ErrorTypes";
 // @ts-ignore
 import {responseRatedMovies, responseRatedTv, responseRatedTvEpisodes} from "./utilities/RatedMoviesData";
-import exp = require("constants");
 
 describe('Fetch Rated Movies associated to an specific accountId', () => {
     it('Retrieve a list of Rated Movies', async () => {
