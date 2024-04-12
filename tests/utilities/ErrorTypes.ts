@@ -5,5 +5,5 @@ export const responseErrorAccountId = {
 
 export const responseErrorInvalidPage = {
     codeMessage: 'TMDB0002',
-    message: '"Invalid page: Pages start at 1 and max at 500. They are expected to be an integer.'
+    message: 'Invalid page: Pages start at 1 and max at 500. They are expected to be an integer.'
 }
