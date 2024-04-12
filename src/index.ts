@@ -12,6 +12,7 @@ import {healthApiRouter} from './interfaces/http/routes/healthApiRouter'
 import {addMediaTypeMDB} from './interfaces/http/routes/addMediaType'
 import {favoritesTMDB} from './interfaces/http/routes/favoritesTMDB'
 import {ratedMediaTypeTMDB} from "./interfaces/http/routes/ratedMediaTypeTMDB";
+import {watchlistMediaTmdb} from "./interfaces/http/routes/watchlistMediaTmdb";
 
 const app = express()
 const PORT = configTmdb.get('PORT')
@@ -28,6 +29,7 @@ app.use('/api/account', routerTMDB)
 app.use('/api/account', addMediaTypeMDB)
 app.use('/api/account', favoritesTMDB)
 app.use('/api/account', ratedMediaTypeTMDB)
+app.use('/api/account', watchlistMediaTmdb)
 
 app.use(errorHandlerApi)
 setupSwagger(app)
