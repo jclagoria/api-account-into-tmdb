@@ -3,25 +3,17 @@ import {fetchData} from '../../../application/services/TmdbService'
 import {DetailsAccount} from '../../../domain/models/detailsAccount'
 import {addMediaIdTOWatchlist, markMovieAsFavorite} from '../../../application/commands/markFavoriteCommandHandler'
 import {generateKey} from '../../../infrastructure/utils/cacheUtilities'
-import {FavoriteMedia} from "../../../domain/models/FavoriteMedia";
-import {ListTMDB} from "../../../domain/models/ListTMDB";
-import {RatedMovie} from "../../../domain/models/RatedMovie";
-import {RatedTvEpisodes} from "../../../domain/models/RatedTvEpisodes";
+import {FavoriteMedia} from '../../../domain/models/FavoriteMedia'
+import {ListTMDB} from '../../../domain/models/ListTMDB'
+import {RatedMovie} from '../../../domain/models/RatedMovie'
+import {RatedTvEpisodes} from '../../../domain/models/RatedTvEpisodes'
+import {validateAccountID, validatePageNumber} from '../middleware/validations'
 
 export const routerTMDB = Router()
 
-routerTMDB.get('/details/:accountId', async (req: Request, res: Response, next: NextFunction) => {
+routerTMDB.get('/details/:accountId', validateAccountID, async (req: Request, res: Response, next: NextFunction) => {
     try {
         const accountId = req.params.accountId
-
-        if (!accountId || isNaN(Number(accountId)) || !Number.isInteger(Number(accountId))) {
-            const error = {
-                codeMessage: 'TMDB0001',
-                message: 'AccountId is required and must be an integer.'
-            }
-            res.status(400).json(error)
-            return
-        }
 
         const paramKey = {
             action: 'accountDetails'
@@ -37,19 +29,10 @@ routerTMDB.get('/details/:accountId', async (req: Request, res: Response, next: 
     }
 })
 
-routerTMDB.post('/:accountId/favorite', async (req: Request, res: Response, next: NextFunction)=> {
+routerTMDB.post('/:accountId/favorite', validateAccountID, async (req: Request, res: Response, next: NextFunction)=> {
     try {
         const {media_type, media_id, favorite} = req.body
         const accountId = req.params.accountId
-
-        if (!accountId || isNaN(Number(accountId)) || !Number.isInteger(Number(accountId))) {
-            const error = {
-                codeMessage: 'TMDB0001',
-                message: 'AccountId is required and must be an integer.'
-            }
-            res.status(400).json(error)
-            return
-        }
 
         const commandResult = await markMovieAsFavorite(accountId,{
             media_type,
@@ -63,19 +46,10 @@ routerTMDB.post('/:accountId/favorite', async (req: Request, res: Response, next
     }
 })
 
-routerTMDB.post('/:accountId/watchlist', async (req: Request, res: Response, next: NextFunction)=> {
+routerTMDB.post('/:accountId/watchlist', validateAccountID, async (req: Request, res: Response, next: NextFunction)=> {
     try {
         const {media_type, media_id, watchlist} = req.body
         const accountId = req.params.accountId
-
-        if(!accountId || isNaN(Number(accountId)) || !Number.isInteger(Number(accountId))) {
-            const error = {
-                codeMessage: 'TMDB0001',
-                message: 'AccountId is required and must be an integer.'
-            }
-            res.status(400).json(error)
-            return
-        }
 
         const commandResult = await addMediaIdTOWatchlist(accountId, {
             media_type,
@@ -89,30 +63,12 @@ routerTMDB.post('/:accountId/watchlist', async (req: Request, res: Response, nex
     }
 })
 
-routerTMDB.get('/:accountId/favorites/movies', async (req: Request, res: Response, next: NextFunction)=> {
+routerTMDB.get('/:accountId/favorites/movies', validateAccountID, validatePageNumber, async (req: Request, res: Response, next: NextFunction)=> {
    try {
        const accountId = req.params.accountId
        const languageValue = req.query.language
        const numberPage = req.query.page
        const sortByValue = req.query.sort_by
-
-       if(!accountId || isNaN(Number(accountId)) || !Number.isInteger(Number(accountId))) {
-           const error = {
-               codeMessage: 'TMDB0001',
-               message: 'AccountId is required and must be an integer.'
-           }
-           res.status(400).json(error)
-           return
-       }
-
-       if(numberPage && isNaN(Number(numberPage)) && !Number.isInteger(Number(numberPage))){
-           const error = {
-               codeMessage: 'TMDB0002',
-               message: 'Invalid page: Pages start at 1 and max at 500. They are expected to be an integer.'
-           }
-           res.status(400).json(error)
-           return
-       }
 
        const paramKey = {
            action: 'favorite-movies',
@@ -131,30 +87,12 @@ routerTMDB.get('/:accountId/favorites/movies', async (req: Request, res: Respons
    }
 })
 
-routerTMDB.get('/:accountId/favorites/tv', async (req: Request, res: Response, next:NextFunction)=> {
+routerTMDB.get('/:accountId/favorites/tv', validateAccountID, validatePageNumber, async (req: Request, res: Response, next:NextFunction)=> {
     try {
         const accountId = req.params.accountId
         const numberPage = req.query.page
         const languageValue = req.query.language
         const sortByValue = req.query.sort_by
-
-        if(!accountId || isNaN(Number(accountId)) || !Number.isInteger(Number(accountId))) {
-            const error = {
-                codeMessage: 'TMDB0001',
-                message: 'AccountId is required and must be an integer.'
-            }
-            res.status(400).json(error)
-            return
-        }
-
-        if(numberPage && isNaN(Number(numberPage)) && !Number.isInteger(Number(numberPage))){
-            const error = {
-                codeMessage: 'TMDB0002',
-                message: 'Invalid page: Pages start at 1 and max at 500. They are expected to be an integer.'
-            }
-            res.status(400).json(error)
-            return
-        }
 
         const urlParam = `/account/${accountId}/favorite/tv?language=${languageValue}&page=${numberPage}&sort_by=${sortByValue}`
         const paramKey = {
@@ -174,28 +112,10 @@ routerTMDB.get('/:accountId/favorites/tv', async (req: Request, res: Response, n
     }
 })
 
-routerTMDB.get('/:accountId/lists', async (req: Request, res: Response, next: NextFunction)=> {
+routerTMDB.get('/:accountId/lists', validateAccountID, validatePageNumber, async (req: Request, res: Response, next: NextFunction)=> {
     try {
         const accountId = req.params.accountId
         const numberPage = req.query.page
-
-        if(!accountId || isNaN(Number(accountId)) || !Number.isInteger(Number(accountId))) {
-            const error = {
-                codeMessage: 'TMDB0001',
-                message: 'AccountId is required and must be an integer.'
-            }
-            res.status(400).json(error)
-            return
-        }
-
-        if(numberPage && isNaN(Number(numberPage)) && !Number.isInteger(Number(numberPage))){
-            const error = {
-                codeMessage: 'TMDB0002',
-                message: 'Invalid page: Pages start at 1 and max at 500. They are expected to be an integer.'
-            }
-            res.status(400).json(error)
-            return
-        }
 
         const urlParam = `/account/${accountId}/lists?page=${numberPage}`
         const paramKey = {
@@ -212,30 +132,12 @@ routerTMDB.get('/:accountId/lists', async (req: Request, res: Response, next: Ne
     }
 })
 
-routerTMDB.get('/:accountId/rated/movies', async (req: Request, res: Response, next: NextFunction) => {
+routerTMDB.get('/:accountId/rated/movies', validateAccountID, validatePageNumber, async (req: Request, res: Response, next: NextFunction) => {
     try {
         const accountId = req.params.accountId
         const numberPage = req.query.page
         const language = req.query.language
         const sortBy = req.query.sort_by
-
-        if(!accountId || isNaN(Number(accountId)) || !Number.isInteger(Number(accountId))) {
-            const error = {
-                codeMessage: 'TMDB0001',
-                message: 'AccountId is required and must be an integer.'
-            }
-            res.status(400).json(error)
-            return
-        }
-
-        if(numberPage && isNaN(Number(numberPage)) && !Number.isInteger(Number(numberPage))){
-            const error = {
-                codeMessage: 'TMDB0002',
-                message: 'Invalid page: Pages start at 1 and max at 500. They are expected to be an integer.'
-            }
-            res.status(400).json(error)
-            return
-        }
 
         const urlParam = `/account/${accountId}/rated/movies?language=${language}&page=${numberPage}&sort_by=${sortBy}`
         const paramKey = {
@@ -252,30 +154,12 @@ routerTMDB.get('/:accountId/rated/movies', async (req: Request, res: Response, n
     }
 })
 
-routerTMDB.get('/:accountId/rated/tv', async (req: Request, res: Response, next: NextFunction)=> {
+routerTMDB.get('/:accountId/rated/tv', validateAccountID, validatePageNumber, async (req: Request, res: Response, next: NextFunction)=> {
     try {
         const accountId = req.params.accountId
         const numberPage = req.query.page
         const language = req.query.language
         const sortBy = req.query.sort_by
-
-        if(!accountId || isNaN(Number(accountId)) || !Number.isInteger(Number(accountId))) {
-            const error = {
-                codeMessage: 'TMDB0001',
-                message: 'AccountId is required and must be an integer.'
-            }
-            res.status(400).json(error)
-            return
-        }
-
-        if(numberPage && isNaN(Number(numberPage)) && !Number.isInteger(Number(numberPage))){
-            const error = {
-                codeMessage: 'TMDB0002',
-                message: 'Invalid page: Pages start at 1 and max at 500. They are expected to be an integer.'
-            }
-            res.status(400).json(error)
-            return
-        }
 
         const urlParam = `/account/${accountId}/rated/tv?language=${language}&page=${numberPage}&sort_by=${sortBy}`
         const paramKey = {
@@ -292,30 +176,12 @@ routerTMDB.get('/:accountId/rated/tv', async (req: Request, res: Response, next:
     }
 })
 
-routerTMDB.get('/:accountId/rated/tv/episodes', async (req: Request, res: Response, next: NextFunction)=> {
+routerTMDB.get('/:accountId/rated/tv/episodes', validateAccountID, validatePageNumber, async (req: Request, res: Response, next: NextFunction)=> {
     try {
         const accountId = req.params.accountId
         const numberPage = req.query.page
         const language = req.query.language
         const sortBy = req.query.sort_by
-
-        if(!accountId || isNaN(Number(accountId)) || !Number.isInteger(Number(accountId))) {
-            const error = {
-                codeMessage: 'TMDB0001',
-                message: 'AccountId is required and must be an integer.'
-            }
-            res.status(400).json(error)
-            return
-        }
-
-        if(numberPage && isNaN(Number(numberPage)) && !Number.isInteger(Number(numberPage))){
-            const error = {
-                codeMessage: 'TMDB0002',
-                message: 'Invalid page: Pages start at 1 and max at 500. They are expected to be an integer.'
-            }
-            res.status(400).json(error)
-            return
-        }
 
         const urlParam = `/account/${accountId}/rated/tv/episodes?language=${language}&page=${numberPage}&sort_by=${sortBy}`
         const paramKey = {
