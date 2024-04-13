@@ -82,7 +82,8 @@ describe('Fetched the list of TV Series associated to the accountId', () => {
     it('Retrieve a list of Rated Tv Episodes', async () => {
         const expectedObject = responseRatedTvEpisodes()
 
-        const response = await api.get('/api/account/10332765/rated/tv/episodes?language=en-US&page=1&sort_by=created_at.asc').expect(200)
+        const response = await api.get('/api/account/10332765/rated/tv/episodes?language=en-US&page=1&sort_by=created_at.asc')
+            .expect(200)
 
         expect(response.status).toBe(200)
         expect(response.body.page).toEqual(expectedObject.page)

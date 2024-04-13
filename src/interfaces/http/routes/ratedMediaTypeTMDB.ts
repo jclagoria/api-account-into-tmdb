@@ -8,69 +8,36 @@ import {RatedTvEpisodes} from '../../../domain/models/RatedTvEpisodes'
 export const ratedMediaTypeTMDB = Router()
 
 ratedMediaTypeTMDB.get('/:accountId/rated/movies', validateAccountID, validatePageNumber, async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        const accountId = req.params.accountId
-        const numberPage = req.query.page
-        const language = req.query.language
-        const sortBy = req.query.sort_by
-
-        const urlParam = `/account/${accountId}/rated/movies?language=${language}&page=${numberPage}&sort_by=${sortBy}`
-        const paramKey = {
-            action: 'rated-movies',
-            numberPage: numberPage
-        }
-
-        const keyCache = generateKey({url: `/account/${accountId}/rated/movies`, params: paramKey})
-        const responseList: RatedMovie = await fetchData<RatedMovie>(keyCache, urlParam)
-
-        res.status(200).json(responseList)
-    } catch (error) {
-        next(error)
-    }
+   await fetchRatedMedia('movies', 'rated/movies', req, res, next)
 })
 
 ratedMediaTypeTMDB.get('/:accountId/rated/tv', validateAccountID, validatePageNumber, async (req: Request, res: Response, next: NextFunction)=> {
-    try {
-        const accountId = req.params.accountId
-        const numberPage = req.query.page
-        const language = req.query.language
-        const sortBy = req.query.sort_by
-
-        const urlParam = `/account/${accountId}/rated/tv?language=${language}&page=${numberPage}&sort_by=${sortBy}`
-        const paramKey = {
-            action: 'rated_tv',
-            numberPage: numberPage
-        }
-
-        const keyCache = generateKey({url: `/account/${accountId}/rated/tv`, params: paramKey})
-        const responseRatedTv = await fetchData(keyCache, urlParam)
-
-        res.status(200).json(responseRatedTv)
-    } catch (error) {
-        next(error)
-    }
+    await fetchRatedMedia('tv', 'rated/tv', req, res, next)
 })
 
 ratedMediaTypeTMDB.get('/:accountId/rated/tv/episodes', validateAccountID, validatePageNumber, async (req: Request, res: Response, next: NextFunction)=> {
-    try {
-        const accountId = req.params.accountId
-        const numberPage = req.query.page
-        const language = req.query.language
-        const sortBy = req.query.sort_by
+    await fetchRatedMedia('tv-episodes', 'rated/tv/episodes', req, res, next)
+})
 
-        const urlParam = `/account/${accountId}/rated/tv/episodes?language=${language}&page=${numberPage}&sort_by=${sortBy}`
+async function fetchRatedMedia(mediaType: string, apiUrl: string, req: Request, res: Response, next: NextFunction) {
+    try {
+        const accountId = req.params.accountId;
+        const numberPage = req.query.page || 'en-US'
+        const language = req.query.language || 1
+        const sortBy = req.query.sort_by || 'created_at.asc'
+
+        const urlParam = `/account/${accountId}/${apiUrl}?language=${language}&page=${numberPage}&sort_by=${sortBy}`
         const paramKey = {
-            action: 'rated_episodes',
+            action: `rated-${mediaType}`,
             numberPage: numberPage,
             sortBy: sortBy
-        }
+        };
 
-        const keyCache = generateKey({url: `/account/${accountId}/rates/tv/episodes`, params: paramKey})
+        const keyCache = generateKey({ url: `/account/${accountId}/${apiUrl}`, params: paramKey })
+        const response = await fetchData(keyCache, urlParam)
 
-        const responseRatedEpisode:RatedTvEpisodes = await fetchData<RatedTvEpisodes>(keyCache, urlParam)
-
-        res.status(200).json(responseRatedEpisode)
+        res.status(200).json(response)
     } catch (error) {
-        next(error)
+        next(error);
     }
-})
+}

@@ -1,4 +1,5 @@
 import {WatchListMovieTMDB} from "../../src/domain/models/WatchListMovieTMDB";
+import {WatchlistTvTMDB} from "../../src/domain/models/WatchlistTvTMDB";
 
 export function responseWatchlistMovies(): WatchListMovieTMDB {
     return {
@@ -104,5 +105,103 @@ export function responseWatchlistMovies(): WatchListMovieTMDB {
         ],
         total_pages: 1,
         total_results: 5
+    }
+}
+
+export function responseWatchlistTv(): WatchlistTvTMDB {
+    return {
+        page: 1,
+        results: [
+            {
+                adult: false,
+                backdrop_path: "/dAepkmD4vdfhS82r2OIqF1nwGR5.jpg",
+                genre_ids: [
+                    10759,
+                    18,
+                    80,
+                    9648
+                ],
+                id: 17610,
+                origin_country: [
+                    "US"
+                ],
+                original_language: "en",
+                original_name: "NCIS: Los Angeles",
+                overview: "The exploits of the Los Angeles–based Office of Special Projects (OSP), an elite division of the Naval Criminal Investigative Service that specializes in undercover assignments.",
+                popularity: 1925.157,
+                poster_path: "/TIIgcznwNfNr3KOZvxn26eKV99.jpg",
+                first_air_date: "2009-09-22",
+                name: "NCIS: Los Angeles",
+                vote_average: 7.561,
+                vote_count: 1096
+            },
+            {
+                adult: false,
+                backdrop_path: "/j2oWA1fFCQy1SwqCK3ODsgy9yUt.jpg",
+                genre_ids: [
+                    80,
+                    18,
+                    9648
+                ],
+                id: 4057,
+                origin_country: [
+                    "US"
+                ],
+                original_language: "en",
+                original_name: "Criminal Minds",
+                overview: "An elite team of FBI profilers analyze the country's most twisted criminal minds, anticipating their next moves before they strike again. The Behavioral Analysis Unit's most experienced agent is David Rossi, a founding member of the BAU who returns to help the team solve new cases.",
+                popularity: 1260.572,
+                poster_path: "/7TCwgX7oQKxcWYEhSPRmaHe6ULN.jpg",
+                first_air_date: "2005-09-22",
+                name: "Criminal Minds",
+                vote_average: 8.322,
+                vote_count: 3570
+            },
+            {
+                adult: false,
+                backdrop_path: "/r0Q6eeN9L1ORL9QsV0Sg8ZV3vnv.jpg",
+                genre_ids: [
+                    18,
+                    9648
+                ],
+                id: 1408,
+                origin_country: [
+                    "US"
+                ],
+                original_language: "en",
+                original_name: "House",
+                overview: "Dr. Gregory House, a drug-addicted, unconventional, misanthropic medical genius, leads a team of diagnosticians at the fictional Princeton–Plainsboro Teaching Hospital in New Jersey.",
+                popularity: 1064.52,
+                poster_path: "/3Cz7ySOQJmqiuTdrc6CY0r65yDI.jpg",
+                first_air_date: "2004-11-16",
+                name: "House",
+                vote_average: 8.595,
+                vote_count: 6175
+            },
+            {
+                adult: false,
+                backdrop_path: "/zZqpAXxVSBtxV9qPBcscfXBcL2w.jpg",
+                genre_ids: [
+                    10765,
+                    18,
+                    10759
+                ],
+                id: 1399,
+                origin_country: [
+                    "US"
+                ],
+                original_language: "en",
+                original_name: "Game of Thrones",
+                overview: "Seven noble families fight for control of the mythical land of Westeros. Friction between the houses leads to full-scale war. All while a very ancient evil awakens in the farthest north. Amidst the war, a neglected military order of misfits, the Night's Watch, is all that stands between the realms of men and icy horrors beyond.",
+                popularity: 2147.418,
+                poster_path: "/1XS1oqL89opfnbLl8WnZY1O1uJx.jpg",
+                first_air_date: "2011-04-17",
+                name: "Game of Thrones",
+                vote_average: 8.448,
+                vote_count: 22957
+            }
+        ],
+        total_pages: 1,
+        total_results: 4
     }
 }
