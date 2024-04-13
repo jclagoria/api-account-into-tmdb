@@ -22,9 +22,9 @@ watchlistMediaTmdb.get('/:accountId/watchlist/tv', validateAccountID, validatePa
 async function fetchWatchlistMediaType(type: 'movies' | 'tv', req: Request, res: Response, next: NextFunction) {
     try {
         const accountId = req.params.accountId
-        const pageNumber = req.query.page
-        const languageValue = req.query.language
-        const sortByValue = req.query.sort_by
+        const pageNumber = req.query.page || 1
+        const languageValue = req.query.language || 'en-US'
+        const sortByValue = req.query.sort_by || 'created_at.asc'
 
         const paramKey = {
             action: `favorite-${type}`,
